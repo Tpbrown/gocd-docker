@@ -126,20 +126,13 @@ rm -rf defaultFiles
 [[ ! -d /config/default ]] && mkdir -p /config/default
 [[ ! -d /config/etc ]] && mkdir -p /config/etc
 
-SERVER_STARTUP_ARGS="${SERVER_STARTUP_ARGS} "
-SERVER_STARTUP_ARGS="${SERVER_STARTUP_ARGS} "
-SERVER_STARTUP_ARGS="${SERVER_STARTUP_ARGS} "
-
 echo_or_exec_go() {
   sh_command=${1-'exec'}
   gocd_command="$(autoDetectJavaExecutable) -Dsun.jnu.encoding=UTF-8 -server -Djava.security.egd=file:/dev/./urandom -XX:HeapDumpPath=/logs -XX:ErrorFile=/logs/jvm-error.log -Xms$SERVER_MEM -Xmx$SERVER_MAX_MEM ${JVM_DEBUG} ${GC_LOG} ${GO_SERVER_SYSTEM_PROPERTIES} -Duser.language=en -Djruby.rack.request.size.threshold.bytes=30000000 -Duser.country=US -Dcruise.config.dir=$GO_CONFIG_DIR -Dcruise.config.file=$GO_CONFIG_DIR/gocd-server-config.xml -Dcruise.server.port=$GO_SERVER_PORT -Dcruise.server.ssl.port=$GO_SERVER_SSL_PORT -jar /go-server/go.jar"
   export -p LANG="UTF-8"
   eval "${sh_command} ${gocd_command}"
 }
-# exec java -jar /go-server/go.jar -server -Djava.security.egd=file:/dev/./urandom -XX:HeapDumpPath=/logs -XX:ErrorFile=/logs/jvm-error.log -Xms$SERVER_MEM -Xmx$SERVER_MAX_MEM -XX:PermSize=$SERVER_MIN_PERM_GEN -XX:MaxPermSize=$SERVER_MAX_PERM_GEN ${JVM_DEBUG} ${GC_LOG} ${GO_SERVER_SYSTEM_PROPERTIES} -Duser.language=en -Djruby.rack.request.size.threshold.bytes=30000000 -Duser.country=US -Dcruise.config.dir=/config -Dcruise.config.file=/config/gocd-server-config.xml
-# exec java -jar /go-server/go.jar -server -Dsun.jnu.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom -XX:HeapDumpPath=/logs -XX:ErrorFile=/logs/jvm-error.log -Duser.language=en -Djruby.rack.request.size.threshold.bytes=30000000 -Duser.country=US -Dcruise.config.dir=/config -Dcruise.config.file=/config/gocd-server-config.xml
 echo_or_exec_go "echo Starting GoCD server with command:"
 echo Starting GoCD server in directory: $SERVER_WORK_DIR
 cd "$SERVER_WORK_DIR"
-# exec $(autoDetectJavaExecutable) -jar /go-server/go.jar ${SERVER_STARTUP_ARGS}
 echo_or_exec_go
