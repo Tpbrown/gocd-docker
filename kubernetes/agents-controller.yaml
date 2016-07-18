@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: gocd-agent-linux
+  labels:
+    app: gocd-agent-linux
+spec:
+  replicas: 2
+  selector:
+    app: gocd-agent-linux
+  template:
+    metadata:
+      labels:
+        app: gocd-agent-linux
+    spec:
+      containers:
+      - name: gocd-agent-linux
+        image: gocd/gocd-agent:latest
+        env:
+          - name: GO-SERVER
+            value: "gocd-server"
+        resources:
+          limits:
+            memory: "1000Mi"
+            cpu: "1"
