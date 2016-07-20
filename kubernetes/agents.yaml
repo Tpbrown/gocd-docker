@@ -17,8 +17,10 @@ spec:
       - name: gocd-agent-linux
         image: gocd/gocd-agent:latest
         env:
-          - name: GO-SERVER
-            value: "gocd-server"
+          - name: GO_SERVER
+            value: $GOCD_SERVICE_HOST
+          - name: GO_SERVER_PORT
+            value: $GOCD_SERVICE_PORT_WEBUI
         resources:
           limits:
             memory: "1000Mi"
